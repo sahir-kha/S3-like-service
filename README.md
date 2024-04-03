@@ -1,5 +1,7 @@
 # S3-like-service
 
+Post request is not able to upload the file perfectly with multer from swagger  please try Postman 
+
 To run the project:(node version 16.16.0)
 
 step1: npm install
@@ -34,3 +36,5 @@ database Tables: (mysql database)
             );
 
 Swagger url -> http://localhost:3000/api-docs/
+
+

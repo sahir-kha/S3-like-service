@@ -16,7 +16,7 @@ const path = require('path');
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the object to retrieve
+ *         description: The ID of the object to retrieve(file name)
  *     responses:
  *       200:
  *         description: Object retrieved successfully

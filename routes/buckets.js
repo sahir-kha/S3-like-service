@@ -5,35 +5,18 @@ const pool = require('../db');
 const multer = require('multer');
 const fs = require('fs');
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'routes/uploads/'); // Specify the correct relative path to the uploads folder
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Use the original filename for uploaded files
+  }
+});
+const upload = multer({ storage: storage });
+
 /**
  * @swagger
- * /buckets/{bucketId}/objects:
- *   post:
- *     summary: Upload an object to a bucket
- *     description: Uploads a file to a specified bucket.
- *     parameters:
- *       - name: bucketId
- *         in: path
- *         description: ID of the bucket to upload the file to
- *         required: true
- *         type: string
- *       - name: file
- *         in: formData
- *         description: The file to upload
- *         required: true
- *         schema:
- *           type: file
- *     responses:
- *       201:
- *         description: Object uploaded successfully
- *         schema:
- *           type: object
- *           properties:
- *             message:
- *               type: string
- *             objectId:
- *               type: integer
- *
  * /buckets:
  *   get:
  *     summary: List all buckets
@@ -55,12 +38,12 @@ const fs = require('fs');
  *     parameters:
  *       - name: bucketId
  *         in: path
- *         description: ID of the bucket containing the object
+ *         description: ID of the bucket containing the object(folder name )
  *         required: true
  *         type: string
  *       - name: objectName
  *         in: path
- *         description: Name of the object to delete
+ *         description: Name of the object to delete(file name)
  *         required: true
  *         type: string
  *     responses:
@@ -72,15 +55,7 @@ const fs = require('fs');
  *         description: Internal server error
  */
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'routes/uploads/'); // Specify the correct relative path to the uploads folder
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname); // Use the original filename for uploaded files
-    }
-  });
-  const upload = multer({ storage: storage });
+
 
   
   router.post('/:bucketId/objects', upload.single('file'), async (req, res) => {
