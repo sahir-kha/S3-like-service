@@ -17,6 +17,36 @@ const upload = multer({ storage: storage });
 
 /**
  * @swagger
+ * /buckets/{bucketId}/objects:
+ *   post:
+ *     summary: Upload an object to a bucket
+ *     description: Uploads a file to a specified bucket.
+ *     content:
+ *        multipart/form-data:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              file:
+ *                type: string
+ *                format: binary
+ *                description: upload your file
+ *     parameters:
+ *       - name: bucketId
+ *         in: path
+ *         description: ID of the bucket to upload the file to
+ *         required: true
+ *         type: string
+ *     responses:
+ *       201:
+ *         description: Object uploaded successfully
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *             objectId:
+ *               type: integer
+ *
  * /buckets:
  *   get:
  *     summary: List all buckets
@@ -38,7 +68,7 @@ const upload = multer({ storage: storage });
  *     parameters:
  *       - name: bucketId
  *         in: path
- *         description: ID of the bucket containing the object(folder name )
+ *         description: ID of the bucket containing the object(folder name)
  *         required: true
  *         type: string
  *       - name: objectName
