@@ -21,7 +21,8 @@ const fs = require('fs');
  *         in: formData
  *         description: The file to upload
  *         required: true
- *         type: file
+ *         schema:
+ *           type: file
  *     responses:
  *       201:
  *         description: Object uploaded successfully
@@ -80,6 +81,8 @@ const storage = multer.diskStorage({
     }
   });
   const upload = multer({ storage: storage });
+
+  
   router.post('/:bucketId/objects', upload.single('file'), async (req, res) => {
     const { bucketId } = req.params;
     const fileName = req.file.originalname;
@@ -136,7 +139,7 @@ router.delete('/:bucketId/objects/:objectName', async (req, res) => {
   
       // Fetch file path from the database using bucketId and objectName
       const [objectRows] = await pool.query('SELECT file_path FROM objects WHERE bucket_id = ? AND object_name = ?', [bucketidInDB, objectName]);
-      
+      console.log(objectRows)
       // Check if the object exists
       if (objectRows.length === 0) {
         return res.status(404).json({ error: 'Object not found' });

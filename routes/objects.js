@@ -30,18 +30,22 @@ router.get('/:objectId', async (req, res) => {
     const [rows] = await pool.query('SELECT object_name, file_path FROM objects WHERE object_name = ?', [objectId]);
     if (rows.length > 0) {
       const fileName = rows[0].object_name;
-      const filePath = rows[0].file_path;
+      let filePath = rows[0].file_path;
 
+      // Remove the leading "routes/" from filePath if it exists
+      if (filePath.startsWith('routes/')) {
+        filePath = filePath.substring('routes/'.length);
+      }
+      // Construct the absolute path
+      const absolutePath = path.resolve(__dirname, '..', filePath);
+
+      // Set the response headers
       res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 
-      let readStream;
-      if (path.isAbsolute(filePath)) {
-        readStream = fs.createReadStream(filePath);
-      } else {
-        const absolutePath = path.resolve(__dirname, filePath);
-        readStream = fs.createReadStream(absolutePath);
-      }
+      // Create a read stream from the file
+      const readStream = fs.createReadStream(absolutePath);
 
+      // Pipe the read stream to the response
       readStream.pipe(res);
     } else {
       res.status(404).json({ error: 'Object not found' });
@@ -51,7 +55,6 @@ router.get('/:objectId', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 
 
 module.exports = router;

@@ -23,6 +23,7 @@ const options = {
         description: 'Development server',
       },
     ],
+    schemes:['http','https']
     
   },
   // Path to the API routes
